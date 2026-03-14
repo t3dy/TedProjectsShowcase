@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { projects, categories, categoryDescriptions } from "./data/projects";
-import type { Category } from "./data/projects";
+import type { Category, Project, ProjectDetails } from "./data/projects";
 
 const techColors: Record<string, string> = {
   React: "bg-sky-500/20 text-sky-300",
@@ -22,34 +23,67 @@ const techColors: Record<string, string> = {
   "DALL-E": "bg-lime-500/20 text-lime-300",
 };
 
-function ProjectCard({ title, description, tech, url }: (typeof projects)[0]) {
+const detailLabels: { key: keyof ProjectDetails; label: string }[] = [
+  { key: "process", label: "Process" },
+  { key: "techStack", label: "Tech Stack" },
+  { key: "learningCurve", label: "Learning Curve" },
+  { key: "mistakes", label: "Mistakes" },
+  { key: "debugging", label: "Debugging" },
+  { key: "takeaways", label: "Takeaways" },
+  { key: "nextSteps", label: "Next Steps" },
+];
+
+function ProjectCard({ title, description, tech, url, details }: Project) {
+  const [expanded, setExpanded] = useState(false);
+
   return (
-    <a
-      href={url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group block rounded-xl border border-zinc-700/50 bg-zinc-800/50 p-5 transition-all hover:border-zinc-500 hover:bg-zinc-800 hover:shadow-lg hover:shadow-black/20"
-    >
-      <h3 className="mb-2 text-lg font-semibold text-zinc-100 group-hover:text-white">
-        {title}
-      </h3>
-      <p className="mb-4 text-sm leading-relaxed text-zinc-400">
-        {description}
-      </p>
-      <div className="flex flex-wrap gap-1.5">
-        {tech.map((t) => (
-          <span
-            key={t}
-            className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${techColors[t] ?? "bg-zinc-700/50 text-zinc-400"}`}
+    <div className="rounded-xl border border-zinc-700/50 bg-zinc-800/50 p-5 transition-all hover:border-zinc-500 hover:bg-zinc-800 hover:shadow-lg hover:shadow-black/20">
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group block"
+      >
+        <h3 className="mb-2 text-lg font-semibold text-zinc-100 group-hover:text-white">
+          {title}
+        </h3>
+        <p className="mb-4 text-sm leading-relaxed text-zinc-400">
+          {description}
+        </p>
+        <div className="flex flex-wrap gap-1.5">
+          {tech.map((t) => (
+            <span
+              key={t}
+              className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${techColors[t] ?? "bg-zinc-700/50 text-zinc-400"}`}
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+        <div className="mt-4 flex items-center gap-1 text-sm font-medium text-zinc-500 group-hover:text-zinc-300">
+          View live
+          <svg
+            className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
           >
-            {t}
-          </span>
-        ))}
-      </div>
-      <div className="mt-4 flex items-center gap-1 text-sm font-medium text-zinc-500 group-hover:text-zinc-300">
-        View live
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+            />
+          </svg>
+        </div>
+      </a>
+
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="mt-3 flex w-full items-center gap-2 rounded-lg border border-zinc-700/50 bg-zinc-900/50 px-3 py-2 text-xs font-medium text-zinc-400 transition-colors hover:border-zinc-600 hover:text-zinc-300"
+      >
         <svg
-          className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+          className={`h-3.5 w-3.5 transition-transform ${expanded ? "rotate-180" : ""}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -58,11 +92,27 @@ function ProjectCard({ title, description, tech, url }: (typeof projects)[0]) {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+            d="M19 9l-7 7-7-7"
           />
         </svg>
-      </div>
-    </a>
+        {expanded ? "Hide details" : "More details"}
+      </button>
+
+      {expanded && (
+        <div className="mt-4 space-y-4 border-t border-zinc-700/50 pt-4">
+          {detailLabels.map(({ key, label }) => (
+            <div key={key}>
+              <h4 className="mb-1 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+                {label}
+              </h4>
+              <p className="text-sm leading-relaxed text-zinc-400">
+                {details[key]}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
