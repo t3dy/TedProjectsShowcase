@@ -50,6 +50,7 @@ This showcase site itself was built the same way — scaffolded, styled, populat
 - **Barton Hiring** — 51+ actions across 8 pipeline stages for the mover hiring lifecycle
 
 ### Esoteric & Experimental
+- **Goetia Sigil Analysis** — Computer vision pipeline reverse-engineering the construction grammar of 72 Goetic seals
 - **TreeTapper** — Interactive Kabbalistic Tree of Life diagram with Golden Dawn color scales
 - **Internship Showcase** — Multi-agent synthesis hub and portfolio command center
 - **Esoteric Beat** — Podcast portal for Western esotericism, Renaissance magic, and PKD

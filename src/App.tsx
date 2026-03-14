@@ -21,6 +21,9 @@ const techColors: Record<string, string> = {
   SVG: "bg-emerald-500/20 text-emerald-300",
   "Framer Motion": "bg-fuchsia-500/20 text-fuchsia-300",
   "DALL-E": "bg-lime-500/20 text-lime-300",
+  OpenCV: "bg-cyan-500/20 text-cyan-300",
+  "scikit-image": "bg-rose-500/20 text-rose-300",
+  "D3.js": "bg-orange-500/20 text-orange-300",
 };
 
 const detailLabels: { key: keyof ProjectDetails; label: string }[] = [

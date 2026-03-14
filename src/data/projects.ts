@@ -315,6 +315,30 @@ export const projects: Project[] = [
     },
   },
   {
+    title: "Goetia Sigil Analysis",
+    description:
+      "Computer vision pipeline for reverse-engineering the construction grammar of the 72 Goetic seals. 8-script pipeline from grid segmentation through hierarchical clustering, with an interactive dashboard.",
+    tech: ["Python", "OpenCV", "scikit-image", "D3.js"],
+    url: "https://t3dy.github.io/goetia-sigil-analysis/",
+    category: "Esoteric & Experimental",
+    details: {
+      process:
+        "Started from the question: can we decompose the 72 Goetic sigils into a formal visual vocabulary? Built an 8-script pipeline that progresses from raw image segmentation through skeleton topology, Hough geometry detection, feature extraction, dimensionality reduction, and hierarchical clustering. Each script produces both data and visualizations, feeding the next stage.",
+      techStack:
+        "Pure Python with OpenCV for image processing, scikit-image for skeletonization (Zhang-Suen thinning), scipy for clustering and spatial analysis, matplotlib for static visualizations. The interactive dashboard uses D3.js to let you explore the sigil feature space, cluster dendrograms, and per-sigil analysis overlays.",
+      learningCurve:
+        "First serious computer vision project. Learned morphological operations (dilation, erosion, skeletonization) not from a textbook but from needing them to solve a specific problem — isolating 72 sigils from a dense grid image. The Hough transform went from abstract math to intuitive tool once I saw it detect the orthogonal bias in sigil construction.",
+      mistakes:
+        "Tried to skip the segmentation step and manually crop sigils. Lasted about 10 before automating. Also initially over-tuned the dilation parameter for one source image — broke when I tried a different scan. The automatic dilation sweep (testing iterations 1-7 and picking the count closest to 76) was the fix.",
+      debugging:
+        "Skeleton topology extraction had edge cases where junction detection over-counted — a 3-way branch in a skeleton occupies multiple pixels, not one. Used scipy.ndimage.label on dilated junction masks to merge pixel clusters into single logical junctions. Also spent time calibrating the Hough circle detector's radius range to catch terminal bubbles without false-positiving on noise.",
+      takeaways:
+        "The biggest finding validated the initial intuition: the global angle distribution shows massive bias toward 0 and 90 degrees, confirming these sigils are built on an orthogonal grid like circuit diagrams. The terminal vocabulary is also surprisingly small (~5 types), suggesting a constrained decorative grammar. Computational analysis revealed structure that centuries of occult scholarship described qualitatively but never quantified.",
+      nextSteps:
+        "Planning to train a generative model that can produce new sigils in the style of the historical corpus — constrained by the discovered grammar rules. Also want to compare the Goetic sigil grammar against other seal traditions (Enochian, planetary seals) to see if the construction rules are unique or shared.",
+    },
+  },
+  {
     title: "Esoteric Beat",
     description:
       "Portfolio and episode guide for podcasts on Western esotericism, Renaissance magic, tarot, and Philip K. Dick. Ornate gold-and-purple aesthetic with filterable episode archive.",
