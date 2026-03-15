@@ -43,17 +43,30 @@ This showcase site itself was built the same way — scaffolded, styled, populat
 - **Marxist Portal** — Guided tours of Marxist thought with dictionary, timelines, and four theoretical traditions
 - **Marxist Tradition** — Deep dives into Classical Marxism, Value-Form Theory, Harvey, and Structuralism
 - **AlchemyDB** — Local-first digital humanities archive for alchemical and esoteric studies
+- **RevEng Zebrapedia** — AI-assisted reverse-engineering of Penn State's PKD Exegesis transcription project
 
 ### Business Solutions
 - **BizSolutionsBarton** — 9-page interactive SaaS demo for a moving company
 - **Barton Catalog** — 8 software solutions explained in business-friendly language
 - **Barton Hiring** — 51+ actions across 8 pipeline stages for the mover hiring lifecycle
 
+### Mobile & Desktop Apps
+- **VoxFugiens** — Local-first Android voice notes app with offline Vosk speech-to-text
+- **OldRAGDonald** — Mobile food safety inspection tool with structured case bundle export
+- **ScribeFarm** — Desktop RAG-assisted writing environment for inspection reports
+
+### Data & Knowledge Tools
+- **Twitter Archive Toolkit** — Turn your Twitter/X export into a searchable, tagged knowledge base
+- **MTGOverlay93** — Archive of MTG draft overlay tools and analysis prototypes
+- **Team Discord Learning Community** — Data mining a Discord server to study learning community dynamics
+
 ### Esoteric & Experimental
 - **Goetia Sigil Analysis** — Computer vision pipeline reverse-engineering the construction grammar of 72 Goetic seals
 - **TreeTapper** — Interactive Kabbalistic Tree of Life diagram with Golden Dawn color scales
 - **Internship Showcase** — Multi-agent synthesis hub and portfolio command center
 - **Esoteric Beat** — Podcast portal for Western esotericism, Renaissance magic, and PKD
+- **Arcana Desktop** — Digital tarot app with MTG Oracle engine for card-based divination
+- **Alchemy Board Game** — Solo browser board game with six iterative versions exploring alchemical resource management
 
 ## Learning Curve & Growth Story
 

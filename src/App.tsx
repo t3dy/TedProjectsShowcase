@@ -24,6 +24,12 @@ const techColors: Record<string, string> = {
   OpenCV: "bg-cyan-500/20 text-cyan-300",
   "scikit-image": "bg-rose-500/20 text-rose-300",
   "D3.js": "bg-orange-500/20 text-orange-300",
+  Kotlin: "bg-violet-500/20 text-violet-300",
+  "Jetpack Compose": "bg-sky-500/20 text-sky-300",
+  Vosk: "bg-teal-500/20 text-teal-300",
+  FastAPI: "bg-emerald-500/20 text-emerald-300",
+  "sentence-transformers": "bg-rose-500/20 text-rose-300",
+  Electron: "bg-cyan-500/20 text-cyan-300",
 };
 
 const detailLabels: { key: keyof ProjectDetails; label: string }[] = [

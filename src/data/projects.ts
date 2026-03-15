@@ -2,7 +2,9 @@ export type Category =
   | "AI Engineering & Dev Tools"
   | "Digital Humanities"
   | "Business Solutions"
-  | "Esoteric & Experimental";
+  | "Esoteric & Experimental"
+  | "Mobile & Desktop Apps"
+  | "Data & Knowledge Tools";
 
 export interface ProjectDetails {
   process: string;
@@ -28,6 +30,8 @@ export const categories: Category[] = [
   "AI Engineering & Dev Tools",
   "Digital Humanities",
   "Business Solutions",
+  "Mobile & Desktop Apps",
+  "Data & Knowledge Tools",
   "Esoteric & Experimental",
 ];
 
@@ -38,6 +42,10 @@ export const categoryDescriptions: Record<Category, string> = {
     "Interactive portals for exploring intellectual traditions — Marx, alchemy, esotericism.",
   "Business Solutions":
     "Sales demos and operational guides built for a real moving company client.",
+  "Mobile & Desktop Apps":
+    "Android and desktop applications for voice capture, field inspection, and report writing.",
+  "Data & Knowledge Tools":
+    "Pipelines and toolkits for turning personal archives into searchable knowledge bases.",
   "Esoteric & Experimental":
     "Interactive toys and portfolio pieces at the intersection of code and the weird.",
 };
@@ -360,6 +368,226 @@ export const projects: Project[] = [
         "Building without a framework first was the right call. When I later learned React, I understood why it exists — not from a tutorial telling me, but from experiencing the pain points it solves. The ornate CSS work also taught me that aesthetic ambition and technical craft reinforce each other.",
       nextSteps:
         "Considering a rebuild in React to add features like search, bookmarking, and a recommendation engine. But there's something authentic about the hand-crafted HTML version that I might preserve as-is and build the enhanced version as a separate project.",
+    },
+  },
+
+  // Mobile & Desktop Apps
+  {
+    title: "VoxFugiens",
+    description:
+      "Local-first, AI-native Android voice notes app. Record voice memos, get automatic transcripts via offline Vosk STT, and query your notes with natural language.",
+    tech: ["Kotlin", "Jetpack Compose", "Vosk", "SQLite"],
+    url: "https://github.com/t3dy/VoxFugiens",
+    category: "Mobile & Desktop Apps",
+    details: {
+      process:
+        "Built in phases: Phase 0 was a bare recorder that saves WAV files. Phase 1 added playback and file management. Phase 2 integrated Vosk for fully offline speech-to-text. Phase 3 added a transcription pipeline that processes recordings in the background. Each phase had a clear acceptance gate before moving on.",
+      techStack:
+        "Kotlin with Jetpack Compose for the UI. Vosk for offline speech-to-text — no cloud API, no network dependency, the model runs on-device. SQLite for the local note database. The architecture is intentionally local-first: your voice data never leaves your phone.",
+      learningCurve:
+        "First Android project. Coming from web development, the Android lifecycle (activities, fragments, services) was a paradigm shift. Jetpack Compose helped because it's declarative like React, but background audio recording and service management were genuinely new territory.",
+      mistakes:
+        "Tried to integrate Vosk transcription synchronously in the UI thread. Predictably froze the app on longer recordings. Had to learn Android's coroutine and background service patterns to run transcription asynchronously while keeping the UI responsive.",
+      debugging:
+        "Audio recording permissions on Android are a maze — runtime permissions, background recording restrictions, and different behavior across Android versions. Also dealt with Vosk model loading time (the offline model is ~50MB) requiring a loading state on first launch.",
+      takeaways:
+        "Local-first isn't just a privacy feature — it's a reliability feature. The app works in airplane mode, in basements with no signal, anywhere. Offline STT via Vosk is surprisingly good for English speech and eliminates the latency and cost of cloud transcription.",
+      nextSteps:
+        "Phase 4 is semantic search across all transcripts. Phase 5 is an answer-from-notes chat interface. Also planning PDF and web import so the app becomes a general-purpose knowledge capture tool, not just voice notes.",
+    },
+  },
+  {
+    title: "OldRAGDonald",
+    description:
+      "Android mobile-first food safety inspection tool. Capture voice, photo, and text observations in the field with offline Vosk transcription, then export structured case bundles for ScribeFarm.",
+    tech: ["Kotlin", "Jetpack Compose", "Vosk", "SQLite"],
+    url: "https://github.com/t3dy/OldRAGDonald",
+    category: "Mobile & Desktop Apps",
+    details: {
+      process:
+        "Built as the field companion to ScribeFarm. An inspector walks through a facility, captures observations (voice memos, photos, typed notes), and the app structures everything into exportable case bundles. The key insight: capture is mobile, analysis is desktop. Don't try to do both on a phone.",
+      techStack:
+        "Same Kotlin/Compose/Vosk stack as VoxFugiens, but with a domain-specific data model for food safety inspections. Each observation is tagged with location, category, and severity. Export produces a JSON manifest plus Markdown summary plus media files — a complete case bundle.",
+      learningCurve:
+        "Learned to design for field conditions: one-handed operation, gloved fingers, noisy environments. UI decisions that seem minor on a desktop (button size, tap target spacing, contrast ratios) become critical when someone is using the app in a cold storage facility.",
+      mistakes:
+        "First version tried to include too much structure upfront — required inspectors to categorize every observation before saving. Field testers hated it. Switched to capture-first, categorize-later: get the observation recorded immediately, organize it when you're back at your desk.",
+      debugging:
+        "Photo capture and voice recording competing for device resources caused issues on lower-end Android devices. Had to implement careful resource management so the camera and microphone don't conflict. Also dealt with storage management for large photo sets.",
+      takeaways:
+        "The best field tool is the one that gets out of your way. Every tap, every required field, every confirmation dialog is friction that slows down an inspector doing time-sensitive work. Minimize capture friction, maximize organization flexibility.",
+      nextSteps:
+        "Planning to add real-time checklist overlays based on facility type, so inspectors can follow regulatory checklists while capturing observations. Also want offline sync so multiple inspectors on the same site can merge their bundles.",
+    },
+  },
+  {
+    title: "ScribeFarm",
+    description:
+      "Desktop RAG-assisted writing environment for food safety inspection reports. Ingests case bundles from OldRAGDonald and augments drafting with a regulatory document corpus for citation-traced writing.",
+    tech: ["Python", "FastAPI", "React", "TypeScript"],
+    url: "https://github.com/t3dy/ScribeFarm",
+    category: "Mobile & Desktop Apps",
+    details: {
+      process:
+        "Designed as the desktop counterpart to OldRAGDonald. Import a case bundle, see all your field observations organized by location and severity, then draft your report with RAG-assisted citation from a corpus of food safety regulations and guidance documents. The writing environment knows what you observed and what regulations apply.",
+      techStack:
+        "FastAPI backend for document ingestion, corpus management, and RAG retrieval. React + TypeScript frontend for the writing workspace. The architecture separates the intelligence layer (Python/FastAPI) from the interaction layer (React) so each can evolve independently.",
+      learningCurve:
+        "First full-stack project with a Python backend and React frontend. Learning to design the API contract between them — what data flows where, what the frontend needs from the backend, how to handle async operations — was the real education. Also learned FastAPI's dependency injection system.",
+      mistakes:
+        "Initially tried to build the RAG pipeline and the writing UI simultaneously. Both were half-finished and neither worked well. Switched to phased delivery: Phase 1 is just bundle ingestion and display. RAG-assisted drafting comes in Phase 3. Ship what works, then add intelligence.",
+      debugging:
+        "Document corpus ingestion for regulatory PDFs was messy — inconsistent formatting, tables that don't parse cleanly, cross-references between documents. Had to build custom parsers for the specific regulation formats rather than relying on generic PDF extraction.",
+      takeaways:
+        "The OldRAGDonald + ScribeFarm pair taught me that mobile and desktop aren't competitors — they're collaborators. Mobile captures, desktop analyzes. Designing for this handoff (the case bundle format) was more important than any individual feature in either app.",
+      nextSteps:
+        "Phase 2 is corpus search and retrieval. Phase 3 is the evidence-linked drafting workspace where every claim in your report is traceable to an observation and a regulation. Phase 5 is the RAG chat assistant for 'what regulation covers this finding?' queries.",
+    },
+  },
+
+  // Data & Knowledge Tools
+  {
+    title: "Twitter Archive Toolkit",
+    description:
+      "Turn your Twitter/X data export into a searchable, tagged, visualized personal knowledge base — entirely on your own machine. Built for 100K+ tweet archives.",
+    tech: ["Python", "SQLite", "sentence-transformers"],
+    url: "https://github.com/t3dy/twitter-archive-toolkit",
+    category: "Data & Knowledge Tools",
+    details: {
+      process:
+        "Started from the question: what have I been thinking about for the last decade? Twitter archives are massive but opaque — a JSON dump isn't a knowledge base. Built a pipeline that ingests the export, creates a searchable SQLite database, auto-tags topics, tracks 'haunting subjects' (recurring obsessions over time), and generates portfolio-ready visualizations.",
+      techStack:
+        "Pure Python with SQLite for the local database. sentence-transformers for semantic embedding and clustering — lets you search by meaning, not just keywords. matplotlib for visualizations. PDF export for focused LLM conversations. No cloud, no API keys, everything runs locally.",
+      learningCurve:
+        "First time working with sentence-transformers for semantic search. The jump from keyword search to vector similarity search was conceptually eye-opening — suddenly 'what was I angry about in 2019' returns meaningful results even without the word 'angry' appearing in any tweet.",
+      mistakes:
+        "Tried to process the entire 100K+ archive in memory. Python happily ate 8GB of RAM before I noticed. Switched to batch processing with SQLite as the intermediate store. Also over-complicated the tagging system before discovering that simple keyword frequency + embedding clusters cover 90% of use cases.",
+      debugging:
+        "Twitter's archive format changed between export versions. JSON structure, field names, and media URL patterns all shifted. Had to build a flexible parser that detects the archive version and adapts. Also dealt with Unicode edge cases in old tweets (emoji encoding, broken HTML entities).",
+      takeaways:
+        "Your own archive is the most undervalued dataset you own. A decade of tweets is a map of your intellectual development, your recurring concerns, your forgotten ideas. The 'haunting subjects' feature — tracking what topics you return to year after year — revealed patterns I never consciously noticed.",
+      nextSteps:
+        "Planning to add a 'forgotten ideas' extractor that surfaces tweets with low engagement that contain novel ideas — the thoughts that fell through the cracks. Also want cross-archive support for Mastodon and Bluesky exports.",
+    },
+  },
+  {
+    title: "RevEng Zebrapedia",
+    description:
+      "AI-assisted reverse-engineering of Penn State's Zebrapedia PKD Exegesis transcription project. Produced a complete humanities infrastructure audit: data model, IA, workflows, UX patterns, and a build spec.",
+    tech: ["HTML", "CSS", "JavaScript"],
+    url: "https://t3dy.github.io/RevEngZebrapedia/",
+    category: "Digital Humanities",
+    details: {
+      process:
+        "Conducted entirely in Claude Code as a single reverse-engineering session. Started by examining the public-facing Zebrapedia site, then systematically documented its data model, information architecture, research workflows, and UX patterns. The output is both an audit of the existing system and a specification for a local-first AI-assisted replacement.",
+      techStack:
+        "The deliverable is a static HTML site documenting the analysis. The interesting tech is in the process: using Claude Code as a reverse-engineering partner to decompose a complex humanities infrastructure into its constituent design decisions.",
+      learningCurve:
+        "Learned to think like a systems archaeologist. Reverse-engineering a live web application means inferring data models from URL patterns, deducing workflows from navigation structure, and understanding design constraints from what's absent as much as what's present.",
+      mistakes:
+        "Initially tried to document everything at once — data model, IA, UX, workflows, all in one pass. The analysis was shallow. Switched to focused passes: one session for data model, one for workflows, one for UX patterns. Depth per pass, breadth across passes.",
+      debugging:
+        "Some aspects of the Zebrapedia architecture were ambiguous from the public interface alone. Had to make educated inferences and clearly mark them as assumptions in the documentation. The audit is honest about what's observed vs. what's inferred.",
+      takeaways:
+        "Reverse-engineering existing systems is one of the most valuable things you can do before building a replacement. The Zebrapedia team made specific design decisions for specific reasons. Understanding those reasons — even when you disagree — prevents you from repeating their mistakes or accidentally discarding their insights.",
+      nextSteps:
+        "The build spec at the end of the audit is the blueprint for a local-first AI-assisted Exegesis research tool. Planning to prototype the core features: local PDF corpus, AI-assisted annotation, and collaborative transcription with version control.",
+    },
+  },
+  {
+    title: "MTGOverlay93",
+    description:
+      "Archive of MTG draft overlay tools and analysis prototypes. Early experiments in game data visualization that informed the Draft Academy project.",
+    tech: ["JavaScript", "HTML", "CSS"],
+    url: "https://github.com/t3dy/MTGOverlay93",
+    category: "Data & Knowledge Tools",
+    details: {
+      process:
+        "A collection of early experiments in MTG draft data visualization — overlays, pick trackers, and color analysis tools. These prototypes were the proving ground for ideas that eventually matured into Draft Academy's more structured learning pathways.",
+      techStack:
+        "Vanilla JavaScript, HTML, and CSS. No frameworks, no build tools. These were rapid prototypes meant to test ideas, not ship products. The code is rough but the concepts are sound.",
+      learningCurve:
+        "These were some of my earliest coding experiments. Working with game data — card pools, pick orders, color distributions — taught me data manipulation fundamentals before I knew what 'data engineering' meant.",
+      mistakes:
+        "No version control discipline. Many experiments were just files in a folder. The lack of structure made it hard to revisit and build on earlier work. Draft Academy exists partly because these prototypes needed a proper home and architecture.",
+      debugging:
+        "Data scraping from draft logs was fragile — format changes would break parsers. Learned the hard way that any pipeline depending on external data formats needs defensive parsing and clear error messages.",
+      takeaways:
+        "Messy prototypes are valuable. Not everything needs to be a polished product. These experiments built intuition about game data that made Draft Academy possible. The archive exists as an honest record of the learning process.",
+      nextSteps:
+        "Most of this functionality has been superseded by Draft Academy. The archive remains as a reference for the evolution from prototype to product.",
+    },
+  },
+  {
+    title: "Team Discord Learning Community",
+    description:
+      "Data mining and analysis of an MTG Discord server to study how learning communities form, share knowledge, and develop collective expertise over time.",
+    tech: ["Python", "SQLite"],
+    url: "https://github.com/t3dy/TeamDiscordLearningCommunity",
+    category: "Data & Knowledge Tools",
+    details: {
+      process:
+        "Exported message history from an MTG-focused Discord server and built analysis pipelines to study the community as a learning system. Who teaches whom? What topics generate the most discussion? How does collective knowledge evolve over draft seasons?",
+      techStack:
+        "Python for data processing and analysis. SQLite for the message database. The focus is on the analysis, not the tooling — simple scripts that answer specific research questions about community learning dynamics.",
+      learningCurve:
+        "First time thinking about social data as a research corpus. Discord messages aren't tweets — they're threaded, contextual, and conversational. Learning to extract meaningful signal from casual chat required different techniques than structured data analysis.",
+      mistakes:
+        "Tried to apply NLP sentiment analysis to Discord messages. Casual gaming chat is full of sarcasm, in-jokes, and context-dependent meaning that sentiment models completely miss. Switched to simpler metrics: message volume, topic frequency, response patterns.",
+      debugging:
+        "Discord's export format includes rich embeds, reactions, and reply chains that complicate simple text analysis. Had to build parsers that handle the full message structure rather than just extracting raw text.",
+      takeaways:
+        "Learning communities have visible patterns if you know where to look. The transition from 'asking basic questions' to 'answering others' questions' is trackable. Expertise development leaves traces in message data.",
+      nextSteps:
+        "Planning to cross-reference Discord activity with draft performance data to see if community participation correlates with skill improvement. Also want to build a 'knowledge map' showing which topics the community has deep expertise in vs. gaps.",
+    },
+  },
+  {
+    title: "Arcana Desktop",
+    description:
+      "Digital tarot and divination app with a full 78-card Rider-Waite Smith deck, interactive spread designer, and an MTG Oracle engine that interprets Magic cards via semantic feature extraction.",
+    tech: ["React", "TypeScript", "Electron", "Vite"],
+    url: "https://t3dy.github.io/Ted-s-Tarot-App/",
+    category: "Esoteric & Experimental",
+    details: {
+      process:
+        "Started as a simple digital tarot deck, then scope-crept into something much weirder: what if you could do tarot readings with Magic: The Gathering cards? The MTG Oracle engine extracts semantic features from card art, flavor text, and mechanics to generate divination-style interpretations. It's absurd and it works surprisingly well.",
+      techStack:
+        "React + TypeScript + Vite for the web version, with Electron wrapping for desktop. The spread designer uses drag-and-drop positioning so users can create custom layouts. The MTG Oracle uses a feature extraction pipeline that maps card properties to traditional tarot correspondences.",
+      learningCurve:
+        "First time building a drag-and-drop interface. React DnD (or the native HTML5 drag API) has quirks that only emerge when you're trying to position cards in a free-form layout rather than reordering a list. Also learned about the Rider-Waite Smith tarot system in enough depth to build accurate card data.",
+      mistakes:
+        "The MTG Oracle's first interpretation algorithm was too literal — mapping creature types to tarot suits (e.g., Angels = Major Arcana). The readings felt mechanical. Switching to semantic feature extraction (color palette, keywords in flavor text, mechanical themes like 'sacrifice' or 'transform') produced much richer interpretations.",
+      debugging:
+        "Card image loading for 78 tarot cards plus MTG card images was a performance issue. Lazy loading with intersection observer solved it for the browsing view, but the spread view needed all selected cards loaded simultaneously. Ended up pre-loading the current spread's cards when the reading starts.",
+      takeaways:
+        "The weirdest project ideas often produce the most interesting technical challenges. Building the MTG Oracle forced me to think about semantic feature extraction in a context where there's no 'correct' answer — just interpretations that feel more or less resonant. That's a different kind of AI problem than classification or search.",
+      nextSteps:
+        "Want to add a reading journal that saves past spreads with personal notes. Also planning a 'deck builder' that lets users create custom divination decks from any card game or image set, using the same semantic extraction pipeline.",
+    },
+  },
+  {
+    title: "Alchemy Board Game",
+    description:
+      "Solo browser board game prototype exploring alchemical themes. Six playable versions showing design evolution from mobile prototype through 'The Merchant of Secrets' — manage Gold, Salts, Elixir, and Health to achieve Magnum Opus.",
+    tech: ["HTML", "CSS", "JavaScript"],
+    url: "https://t3dy.github.io/AlchemyBoardGame/",
+    category: "Esoteric & Experimental",
+    details: {
+      process:
+        "Built iteratively across six versions, each exploring a different game design direction. Version 1 was a minimal mobile prototype. Version 6 ('The Merchant of Secrets') is a full resource management game with multiple win conditions. The version history is preserved so you can see the design evolution.",
+      techStack:
+        "Vanilla HTML, CSS, and JavaScript for all six versions. No framework, no build step. Each version is a self-contained single-page app. The simplicity of the stack meant I could iterate on game mechanics without fighting tooling.",
+      learningCurve:
+        "Game design is a completely different discipline from software engineering. Balancing resource curves (how fast should Gold accumulate vs. Health decay?) requires playtesting and intuition, not just logic. Learned that game feel is as important as game mechanics.",
+      mistakes:
+        "Version 3 added too many resources at once (6 simultaneous meters to manage). Players couldn't form a strategy because there were too many variables. Version 4 simplified back to 4 core resources and the game became playable. Complexity isn't depth.",
+      debugging:
+        "Game state management in vanilla JS without a framework meant manually tracking every resource, every turn counter, every win/loss condition. State bugs were subtle — a resource going negative, a turn counter not resetting. Would use React state management if rebuilding.",
+      takeaways:
+        "Shipping six versions of the same game taught me more about iterative design than any methodology. Each version's failures directly informed the next version's improvements. The version history is the design document.",
+      nextSteps:
+        "Considering a React rebuild with proper state management and a more polished UI. Also want to add a multiplayer mode where players trade resources, turning it from a solo puzzle into a negotiation game.",
     },
   },
 ];
